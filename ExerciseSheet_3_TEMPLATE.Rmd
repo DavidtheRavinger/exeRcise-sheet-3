@@ -82,6 +82,11 @@ a)  Create a new repository on GitHub in your account named
     `exeRcise-sheet-3`. Make sure you create a **public repository** so
     we are able to see it for grading. Add the link to the repository
     below:
+  
+HTTPS Link: https://github.com/DavidtheRavinger/exeRcise-sheet-3.git
+
+SSH Link: git@github.com:DavidtheRavinger/exeRcise-sheet-3.git
+
 b)  Push your code to this new repository by copying and executing the
     snippet on github listed under
     `…or push an existing repository from the command line`.
