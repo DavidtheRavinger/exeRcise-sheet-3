@@ -111,6 +111,35 @@ a)  Load the `pixar_films` dataset into R. Clean the dataset by removing
     films without a title. Inspect the variable `film_rating`. What are
     the possible values and what do they mean? Create a factor variable
     for the film rating. Why is this appropriate?
+    
+```{r}
+library(tidyverse)
+
+pixar_films <- read_csv("data/pixar_films.csv")
+
+pixar_films_clean <- pixar_films %>%
+  filter(!is.na(film))
+
+# inspect the variable fiml_rating and look up possible values
+unique(pixar_films_clean$film_rating)
+
+# The meaning of these values:
+
+# G — General Audience (suitable for all ages)
+# PG — Parental Guidance Suggested (some material may not be suitable for children)
+
+# frage an julian : soll man hier die na werte rausfiltern?
+pixar_films_clean <- pixar_films_clean %>%
+  mutate(film_rating = na_if(film_rating, "N/A")) %>%
+  filter(!is.na(film_rating)) %>%
+  mutate(film_rating_factor = factor(film_rating, levels = c("G", "PG"), ordered = TRUE))
+
+# Why is this appropriate?
+# Creating a factor variable for film rating is appropriate because film ratings are categorical data with a natural order. Using an ordered factor allows R to correctly interpret and analyze these categories, enabling meaningful summaries and visualizations that respect their hierarchy.
+
+
+```
+
 
 <!-- -->
 
@@ -120,6 +149,23 @@ b)  Inspect the film titles manually. Which films form a film series? A
     e.g. "Despicable Me" and "Despicable Me 2". Create a dataframe which
     displays a list of the different series with the titles of the films
     and how many films belong to the series. Output the dataframe.
+
+Which films form a film series?
+    
+Toy Story series:
+Toy Story (1995), Toy Story 2 (1999), Toy Story 3 (2010), Toy Story 4 (2019)
+
+Cars series:
+Cars (2006), Cars 2 (2011), Cars 3 (2017)
+
+Monsters series:
+Monsters, Inc. (2001), Monsters University (2013) — Prequel to Monsters, Inc.
+
+Finding series:
+Finding Nemo (2003), Finding Dory (2016)
+
+The Incredibles series:
+The Incredibles (2004), Incredibles 2 (2018)
 
 c)  Load the `public_response` dataframe into R. Convert the
     `cinema_score` variable into a factor while ensuring the factor
