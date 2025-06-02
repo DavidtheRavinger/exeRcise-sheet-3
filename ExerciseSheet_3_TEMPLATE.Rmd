@@ -232,9 +232,64 @@ d)  Choose one of the variables representing the public response and
     series? Do you see any patterns?
     
 ```{r}
+# Liste von Keywords zur Serienerkennung
+keywords <- c("Toy Story", "Cars", "Monsters", "Finding", "Incredibles")
+
+# Funktion zum Erkennen der Serie
+get_series <- function(title) {
+  matched <- keywords[str_detect(title, fixed(keywords))]
+  if (length(matched) == 0) return(NA_character_)
+  return(matched[1])
+}
+
+combined_data <- combined_data %>%
+  rowwise() %>%
+  mutate(series = get_series(film)) %>%
+  ungroup()
+
+series_films <- combined_data %>%
+  filter(!is.na(series))
+
+series_films <- series_films %>%
+  arrange(series, release_date) %>%
+  mutate(film = factor(film, levels = unique(film)))
+
+# Legendenlabels erstellen: "Serie (Film1, Film2, ...)"
+legend_labels <- series_films %>%
+  group_by(series) %>%
+  summarise(films = paste(film, collapse = ", ")) %>%
+  mutate(label = paste0(series, " (", films, ")")) %>%
+  deframe()
+
+series_colors <- c(
+  "Toy Story" = "#1f77b4",
+  "Cars" = "#ff7f0e",
+  "Monsters" = "#2ca02c",
+  "Finding" = "#d62728",
+  "Incredibles" = "#9467bd"
+)
+
+
+
+# Plot
+ggplot(series_films, aes(x = series, y = rotten_tomatoes, fill = series, group = film)) +
+  geom_bar(aes(group = film), stat = "identity", position = position_dodge()) +
+  scale_fill_manual(values = series_colors, labels = legend_labels) +
+  labs(
+    title = "Rotten Tomatoes Scores for Pixar Film Series",
+    x = "Film Series",
+    y = "Rotten Tomatoes Score",
+    fill = "Series (Films)",
+    caption = "Films sorted by release date"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.caption = element_text(hjust = 0.5, face = "italic", size = 9)
+  )
 
 ```
-
+Answer: Yes, I can observe a pattern: in all series, the films tend to have lower scores the older their release date is — except for the Cars series, where Cars 3 actually received a higher score than Cars 2.
 
 ## Exercise 4: Open Analysis (4 points)
 
