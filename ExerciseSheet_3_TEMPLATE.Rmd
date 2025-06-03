@@ -123,22 +123,23 @@ pixar_films_clean <- pixar_films %>%
 # inspect the variable fiml_rating and look up possible values
 unique(pixar_films_clean$film_rating)
 
-# The meaning of these values:
-
-# G — General Audience (suitable for all ages)
-# PG — Parental Guidance Suggested (some material may not be suitable for children)
-
-# Based on the Motion Picture Association film rating system there are these options: G, PG, PG-13 (Parents strongly cautioned – some material may be inappropriate for children under 13.), R (Restricted – under 17 requires accompanying parent or adult guardian.), NC-17 (No one 17 and under admitted – strictly for adults only.) and NA
 
 pixar_films_clean <- pixar_films_clean %>%
   mutate(film_rating_factor = as.factor(film_rating))
 
-# Why is this appropriate?
-# Creating a factor variable for film rating is appropriate because film ratings are categorical data with a natural order. Using an ordered factor allows R to correctly interpret and analyze these categories, enabling meaningful summaries and visualizations that respect their hierarchy.
+
 
 
 ```
+The meaning of these values:
 
+G — General Audience (suitable for all ages)
+PG — Parental Guidance Suggested (some material may not be suitable for children)
+
+Based on the Motion Picture Association film rating system there are these options: G, PG, PG-13 (Parents strongly cautioned – some material may be inappropriate for children under 13.), R (Restricted – under 17 requires accompanying parent or adult guardian.), NC-17 (No one 17 and under admitted – strictly for adults only.) and NA.
+
+Why is this appropriate?
+-> Creating a factor variable for film rating is appropriate because film ratings are categorical data with a natural order. Using an ordered factor allows R to correctly interpret and analyze these categories, enabling meaningful summaries and visualizations that respect their hierarchy.
 
 <!-- -->
 
