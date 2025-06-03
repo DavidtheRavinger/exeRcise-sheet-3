@@ -128,9 +128,10 @@ unique(pixar_films_clean$film_rating)
 # G — General Audience (suitable for all ages)
 # PG — Parental Guidance Suggested (some material may not be suitable for children)
 
-# frage an julian : soll man hier die na werte rausfiltern?
+# Based on the Motion Picture Association film rating system there are these options: G, PG, PG-13 (Parents strongly cautioned – some material may be inappropriate for children under 13.), R (Restricted – under 17 requires accompanying parent or adult guardian.), NC-17 (No one 17 and under admitted – strictly for adults only.) and NA
+
 pixar_films_clean <- pixar_films_clean %>%
-  mutate(film_rating_factor = factor(film_rating, levels = c("G", "PG"), ordered = TRUE))
+  mutate(film_rating_factor = as.factor(film_rating))
 
 # Why is this appropriate?
 # Creating a factor variable for film rating is appropriate because film ratings are categorical data with a natural order. Using an ordered factor allows R to correctly interpret and analyze these categories, enabling meaningful summaries and visualizations that respect their hierarchy.
@@ -192,7 +193,7 @@ series_summary <- pixar_films_clean %>%
     count = n()
   )
 
-print(series_summary)
+knitr::kable(series_summary)
 ```
 
 
@@ -273,18 +274,19 @@ series_colors <- c(
 
 # Plot
 ggplot(series_films, aes(x = series, y = rotten_tomatoes, fill = series, group = film)) +
-  geom_bar(aes(group = film), stat = "identity", position = position_dodge()) +
+  geom_bar(aes(group = film), stat = "identity", position = position_dodge(width = 1.0)) +
   scale_fill_manual(values = series_colors, labels = legend_labels) +
   labs(
     title = "Rotten Tomatoes Scores for Pixar Film Series",
     x = "Film Series",
     y = "Rotten Tomatoes Score",
     fill = "Series (Films)",
-    caption = "Films sorted by release date"
+    caption = "Bars corresponding to films are ordered from left to \nright in ascending release date order, corresponding to the order in the legend"
   ) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.caption.position = "plot",
     plot.caption = element_text(hjust = 0.5, face = "italic", size = 9)
   )
 
