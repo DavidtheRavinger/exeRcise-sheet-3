@@ -321,10 +321,9 @@ d)  Come up with a (research) question you want to answer with the data
     within one sentence. It should be a question that can be answered
     with the dataset and using R.
     
-How have emissions from diesel fuel evolved since 1970 to 2019 in Germany compared to Japan, the USA, Italy and Thailand?
+How has per capita alcohol consumption in Germany evolved from 1890 to 2014 compared to the United-States, Netherlands, Italy and Australia?
 
--> This research question is interesting because it helps us, as Germans, understand how diesel-related emissions have evolved in other major countries, allowing us to reflect on our own environmental impact and derive insights for improving future policies and behavior.
-    
+-> It is common knowledge that alcohol consumption is highly unhealthy for us, therefore it is important to reflect on the trend of our consumption, especially in comparison to other countries with different drinking cultures and policies. 
 
 e)  Use R to answer your chosen question. Please limit your analysis to
     the functions and techniques we have covered so far in the course.
