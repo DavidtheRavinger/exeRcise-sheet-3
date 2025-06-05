@@ -313,8 +313,8 @@ b)  Download the dataset and track it in git.
 
 c)  Put the name / title of the dataset and a link to it below.
 
--   Dataset Name: Air pollution emissions by fuel (CEDS, 2022)
--   Link: <https://github.com/owid/owid-datasets/blob/master/datasets/Air%20pollution%20emissions%20by%20fuel%20(CEDS%2C%202022)/Air%20pollution%20emissions%20by%20fuel%20(CEDS%2C%202022).csv>
+-   Dataset Name: Alcohol consumption since 1890 (Alexander & Holmes, 2017)
+-  Link: https://github.com/owid/owid-datasets/tree/master/datasets/Alcohol%20consumption%20since%201890%20(Alexander%20%26%20Holmes%2C%202017)
 
 d)  Come up with a (research) question you want to answer with the data
     and briefly explain why you believe this is an interesting question
