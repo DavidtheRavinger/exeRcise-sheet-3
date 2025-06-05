@@ -303,23 +303,114 @@ determining the research question yourself.
 a)  Go to <https://github.com/owid/owid-datasets/tree/master/datasets>
     and choose a dataset that interests you. You can have a look at
     <https://ourworldindata.org/> to gather some inspiration.
+    
+-> Alcohol consumption since 1890 (Alexander & Holmes, 2017).csv
+
 b)  Download the dataset and track it in git.
+
+
+
+
 c)  Put the name / title of the dataset and a link to it below.
 
--   Dataset Name: ...
--   Link: <https://github.com/owid/owid-datasets/>...
+-   Dataset Name: Air pollution emissions by fuel (CEDS, 2022)
+-   Link: <https://github.com/owid/owid-datasets/blob/master/datasets/Air%20pollution%20emissions%20by%20fuel%20(CEDS%2C%202022)/Air%20pollution%20emissions%20by%20fuel%20(CEDS%2C%202022).csv>
 
 d)  Come up with a (research) question you want to answer with the data
     and briefly explain why you believe this is an interesting question
     within one sentence. It should be a question that can be answered
     with the dataset and using R.
+    
+How have emissions from diesel fuel evolved since 1970 to 2019 in Germany compared to Japan, the USA, Italy and Thailand?
+
+-> This research question is interesting because it helps us, as Germans, understand how diesel-related emissions have evolved in other major countries, allowing us to reflect on our own environmental impact and derive insights for improving future policies and behavior.
+    
+
 e)  Use R to answer your chosen question. Please limit your analysis to
     the functions and techniques we have covered so far in the course.
     You are **not expected** to use advanced statistical models or
     external packages which haven't been introduced.
+    
+```{r}
+
+air_pollution_data <- read_csv("data/Air pollution emissions by fuel (CEDS, 2022).csv")
+
+countries <- c("Germany", "Japan", "United States", "Italy", "Thailand")
+
+annual_change <- air_pollution_data %>%
+  filter(Entity %in% countries, Year >= 1970, Year <= 2019) %>%
+  select(Entity, Year, diesel_oil_nox) %>%
+  group_by(Entity) %>%
+  summarise(
+    start_value = diesel_oil_nox[Year == min(Year)],
+    end_value = diesel_oil_nox[Year == max(Year)],
+    years = max(Year) - min(Year),
+    avg_annual_change_percent = ((end_value / start_value)^(1/years) - 1) * 100
+  )
+
+knitr::kable(annual_change, digits = 2,
+             col.names = c("Country", "Start Value (1970)", "End Value (2019)", "Years", "Avg Annual Change (%)"),
+             caption = "Average Annual Change of Diesel Emissions from 1970 to 2019")
+
+```
+
+
+
 f)  Create a meaningful plot / figure with the dataset. Make sure to
     provide a figure caption (via the chunk options / Rmarkdown) and
     correctly label the figure.
+    
+
+```{r}
+# Filtere die relevanten Länder und Jahre, nur Entity, Year und diesel_oil_nox
+data_plot <- air_pollution_data %>%
+  filter(Entity %in% countries, Year >= 1970, Year <= 2019) %>%
+  select(Entity, Year, diesel_oil_nox)
+
+# Plot mit Linien für jedes Land
+ggplot(data_plot, aes(x = Year, y = diesel_oil_nox, color = Entity)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Development of Diesel Emissions (NOx) from 1970 to 2019",
+    subtitle = "Comparison of Germany, Japan, USA, Italy, and Thailand",
+    x = "Year",
+    y = "Diesel Emissions (NOx)",
+    color = "Country"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom"
+  )
+```
+
+
+```{r}
+# Daten filtern
+data_plot <- air_pollution_data %>%
+  filter(Entity %in% countries, Year >= 1971, Year <= 2019) %>%  # ab 1971, da wir diff berechnen
+  select(Entity, Year, diesel_oil_nox) %>%
+  arrange(Entity, Year) %>%
+  group_by(Entity) %>%
+  mutate(
+    prev_value = lag(diesel_oil_nox),
+    annual_change_rate = (diesel_oil_nox / prev_value - 1) * 100
+  ) %>%
+  filter(!is.na(annual_change_rate))  # erste Zeile pro Land hat keine Änderung
+
+# Plot der jährlichen Änderungsrate
+ggplot(data_plot, aes(x = Year, y = annual_change_rate, color = Entity)) +
+  geom_line(size = 1) +
+  labs(
+    title = "Annual Percentage Change of Diesel Emissions (NOx)",
+    subtitle = "Germany, Japan, USA, Italy, and Thailand (1971-2019)",
+    x = "Year",
+    y = "Annual Change Rate (%)",
+    color = "Country"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
+
 
 ## Final Note
 
