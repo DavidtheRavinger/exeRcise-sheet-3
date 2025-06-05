@@ -93,7 +93,6 @@ b)  Push your code to this new repository by copying and executing the
     
 I uploaded my code to the new repository by copying and running the snippet shown on GitHub in the terminal.
 
-The code
 c)  Regularly push your latest changes to GitHub again and especially do
     so when you are finished with this sheet.
 
@@ -375,7 +374,7 @@ alc_plot_data %>%
   geom_boxplot(outlier.shape = NA) +
   geom_point(color = "red") +
   labs(
-    title = "alcohol consumption in high-income countries in 2014",
+    title = "Alcohol Consumption in selected high-income countries in 2014",
     x = "liters of pure alcohol per capita",
     y = ""
   )
