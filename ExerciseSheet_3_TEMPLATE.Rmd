@@ -331,25 +331,30 @@ e)  Use R to answer your chosen question. Please limit your analysis to
     external packages which haven't been introduced.
     
 ```{r}
+library(kableExtra)
 
-air_pollution_data <- read_csv("data/Air pollution emissions by fuel (CEDS, 2022).csv")
+alcohol_data <- read_csv("data/Alcohol consumption since 1890 (Alexander & Holmes, 2017).csv")
 
-countries <- c("Germany", "Japan", "United States", "Italy", "Thailand")
-
-annual_change <- air_pollution_data %>%
-  filter(Entity %in% countries, Year >= 1970, Year <= 2019) %>%
-  select(Entity, Year, diesel_oil_nox) %>%
+countries = c("United States", "Netherlands", "Italy", "Australia", "Germany")    
+    
+summary_data <- alcohol_data %>%
+  filter(Entity %in% countries) %>%
   group_by(Entity) %>%
+   rename(alcohol_consumption = `Alcohol consumption since 1890 (Alexander & Holmes, 2017)`) %>%
   summarise(
-    start_value = diesel_oil_nox[Year == min(Year)],
-    end_value = diesel_oil_nox[Year == max(Year)],
-    years = max(Year) - min(Year),
-    avg_annual_change_percent = ((end_value / start_value)^(1/years) - 1) * 100
-  )
+    `value 1890` = alcohol_consumption[which(Year == 1890)],
+    `value 2014` = alcohol_consumption[which(Year == 2014)],
+    `percental change from 1890 to 2014` = ((`value 2014` / `value 1890`) - 1) * 100,
+    `mean rate of change per decade` = (`value 2014` - `value 1890`) / ((2014-1890) / 10),
+    cor = cor(alcohol_consumption, Year),
+    `Year with max` = Year[which.max(alcohol_consumption)],
+    `max value` = max(alcohol_consumption)
+  ) %>%
+  mutate(across(where(is.numeric), ~ round(.x, 3)))
 
-knitr::kable(annual_change, digits = 2,
-             col.names = c("Country", "Start Value (1970)", "End Value (2019)", "Years", "Avg Annual Change (%)"),
-             caption = "Average Annual Change of Diesel Emissions from 1970 to 2019")
+summary_data %>%
+  kable(format = "html", align = "c", caption = "Summary of Alcohol Consumption (1890–2014)") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = FALSE)
 
 ```
 
